@@ -5,6 +5,12 @@ if (agent.indexOf('iphone') >= 0 || agent.indexOf('ipad') >= 0) {
   isiOS = true;
 }
 
+const HOST = window.location.hostname;
+let isDevEnv = false;
+if (HOST === 'localhost:5000') {
+  isDevEnv = true;
+}
+
 let clr;
 let socket;
 
@@ -141,7 +147,11 @@ function setup() {
   const w = 600;
   const h = 400;
 
-  socket = io.connect('http://localhost:80');
+  if (isDevEnv) {
+    socket = io.connect(HOST);
+  } else {
+    socket = io.connect();
+  }
   socket.on('mouse', reDrawShape);
 
   createCanvas(w, h);

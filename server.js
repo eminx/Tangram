@@ -1,11 +1,11 @@
-let express = require('express');
-let app = express();
-let host = 9000;
-let server = app.listen(host);
+const express = require('express');
+const app = express();
+const port = process.env.PORT || 5000;
+const server = app.listen(port);
 
 app.use(express.static('public'));
 
-console.log('Socket server is running. localhost:' + host);
+console.log('Socket server is running. localhost:' + port);
 
 let socket = require('socket.io');
 let io = socket(server);

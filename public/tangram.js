@@ -141,7 +141,7 @@ function setup() {
   const w = 600;
   const h = 400;
 
-  socket = io.connect('http://localhost:9000');
+  socket = io.connect('http://localhost:5000');
   socket.on('mouse', reDrawShape);
 
   createCanvas(w, h);

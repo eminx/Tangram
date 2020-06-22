@@ -1,54 +1,70 @@
 'use strict';
 
+// Base class that does all the common operations.
 class Shape {
-  constructor(id, x, y, color) {
+  constructor(id, x, y, color, size) {
     this.id = id;
     this.pos = createVector(x, y);
     this.color = color;
     this.angle = 0;
-    this.radius;
+    this.radius = 30;
+    this.size = size;
   }
   show() {
     noStroke();
     fill(this.color);
-    push();
-    this.radius = 45;
-    rotate(this.angle);
-    fill(10, 0);
-    circle(0, 0, this.radius);
-    pop();
+  }
+
+  rotateCW() {
+    this.angle += PI / 4;
+  }
+  rotateCCW() {
+    this.angle -= PI / 4;
   }
 }
 
 class Rectan extends Shape {
   show() {
-    // super();
+    super.show();
+    push();
     this.radius = 45;
+    translate(this.pos.x, this.pos.y);
+    rotate(this.angle);
     rect(0, 0, 10 * sqrt(50), 10 * sqrt(50));
+    fill(10, 0);
+    circle(0, 0, this.radius);
+    translate(-this.pos.x, -this.pos.y);
+    pop();
   }
 }
 
 class Quadri extends Shape {
   show() {
-    // super();
+    super.show();
+    push();
     this.radius = 45;
+    translate(this.pos.x, this.pos.y);
+    rotate(this.angle);
     quad(-25, -25, 75, -25, 25, 25, -75, 25);
+    fill(10, 0);
+    circle(0, 0, this.radius);
+    translate(-this.pos.x, -this.pos.y);
+    pop();
   }
 }
 
 class Triangle extends Shape {
-  constructor(size) {
-    super(size);
-    this.size = size;
-  }
   show() {
-    // super();
+    super.show();
     if (this.size == 'big') {
       push();
       this.radius = 60;
-
+      translate(this.pos.x, this.pos.y);
+      rotate(this.angle);
       triangle(-100, -50, 100, -50, 0, 50);
+      fill(10, 0);
       circle(0, -10, this.radius);
+      translate(-this.pos.x, -this.pos.y);
       pop();
     }
     if (this.size == 'medium') {
@@ -124,12 +140,12 @@ function setup() {
   angleMode(RADIANS);
   rectMode(CENTER);
   noStroke();
+  shapes.push(new Triangle(1, 350, 150, colors[4], 'big'));
+  shapes.push(new Triangle(2, 100, 300, colors[4], 'big'));
+  shapes.push(new Triangle(3, 100, 150, colors[4], 'medium'));
   shapes.push(new Rectan(4, 200, 200, colors[4]));
-  shapes.push(new Triangle(1, 350, 150, 'big', colors[4]));
-  shapes.push(new Triangle(2, 100, 300, 'big', colors[4]));
-  shapes.push(new Triangle(3, 100, 150, 'medium', colors[4]));
-  shapes.push(new Triangle(5, 250, 50, 'small', colors[4]));
-  shapes.push(new Triangle(6, 100, 50, 'small', colors[4]));
+  shapes.push(new Triangle(5, 250, 50, colors[4], 'small'));
+  shapes.push(new Triangle(6, 100, 50, colors[4], 'small'));
   shapes.push(new Quadri(7, 250, 300, colors[4]));
 }
 

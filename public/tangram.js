@@ -1,30 +1,31 @@
 'use strict';
-var isiOS = false;
-var agent = navigator.userAgent.toLowerCase();
-if (agent.indexOf('iphone') >= 0 || agent.indexOf('ipad') >= 0) {
-  isiOS = true;
-}
 
-const HOST = window.location.hostname;
-let isDevEnv = false;
-if (HOST === 'localhost:5000') {
-  isDevEnv = true;
-}
-
-let clr;
-let socket;
-
-class Rectan {
-  constructor(id, x, y, color) {
+// Base class that does all the common operations.
+class Shape {
+  constructor(id, x, y, color, size) {
     this.id = id;
     this.pos = createVector(x, y);
     this.color = color;
     this.angle = 0;
     this.radius = 30;
+    this.size = size;
   }
   show() {
     noStroke();
     fill(this.color);
+  }
+
+  rotateCW() {
+    this.angle += PI / 4;
+  }
+  rotateCCW() {
+    this.angle -= PI / 4;
+  }
+}
+
+class Rectan extends Shape {
+  show() {
+    super.show();
     push();
     this.radius = 45;
     translate(this.pos.x, this.pos.y);
@@ -35,24 +36,11 @@ class Rectan {
     translate(-this.pos.x, -this.pos.y);
     pop();
   }
-  rotateCW() {
-    this.angle += PI / 4;
-  }
-  rotateCCW() {
-    this.angle -= PI / 4;
-  }
 }
-class Quadri {
-  constructor(id, x, y, color) {
-    this.id = id;
-    this.pos = createVector(x, y);
-    this.color = color;
-    this.angle = 0;
-    this.radius = 30;
-  }
+
+class Quadri extends Shape {
   show() {
-    noStroke();
-    fill(this.color);
+    super.show();
     push();
     this.radius = 45;
     translate(this.pos.x, this.pos.y);
@@ -63,26 +51,11 @@ class Quadri {
     translate(-this.pos.x, -this.pos.y);
     pop();
   }
-  rotateCW() {
-    this.angle += PI / 4;
-  }
-  rotateCCW() {
-    this.angle -= PI / 4;
-  }
 }
 
-class Triangle {
-  constructor(id, x, y, size, color) {
-    this.id = id;
-    this.pos = createVector(x, y);
-    this.size = size;
-    this.color = color;
-    this.angle = 0;
-    this.radius;
-  }
+class Triangle extends Shape {
   show() {
-    noStroke();
-    fill(this.color);
+    super.show();
     if (this.size == 'big') {
       push();
       this.radius = 60;
@@ -124,13 +97,22 @@ class Triangle {
       pop();
     }
   }
-  rotateCW() {
-    this.angle += PI / 4;
-  }
-  rotateCCW() {
-    this.angle -= PI / 4;
-  }
 }
+
+var isiOS = false;
+var agent = navigator.userAgent.toLowerCase();
+if (agent.indexOf('iphone') >= 0 || agent.indexOf('ipad') >= 0) {
+  isiOS = true;
+}
+
+const HOST = window.location.hostname;
+let isDevEnv = false;
+if (HOST === 'localhost:5000') {
+  isDevEnv = true;
+}
+
+let clr;
+let socket;
 
 var colors = [
   'red',
@@ -158,12 +140,12 @@ function setup() {
   angleMode(RADIANS);
   rectMode(CENTER);
   noStroke();
-  shapes.push(new Triangle(1, 350, 150, 'big', colors[4]));
-  shapes.push(new Triangle(2, 100, 300, 'big', colors[4]));
-  shapes.push(new Triangle(3, 100, 150, 'medium', colors[4]));
+  shapes.push(new Triangle(1, 350, 150, colors[4], 'big'));
+  shapes.push(new Triangle(2, 100, 300, colors[4], 'big'));
+  shapes.push(new Triangle(3, 100, 150, colors[4], 'medium'));
   shapes.push(new Rectan(4, 200, 200, colors[4]));
-  shapes.push(new Triangle(5, 250, 50, 'small', colors[4]));
-  shapes.push(new Triangle(6, 100, 50, 'small', colors[4]));
+  shapes.push(new Triangle(5, 250, 50, colors[4], 'small'));
+  shapes.push(new Triangle(6, 100, 50, colors[4], 'small'));
   shapes.push(new Quadri(7, 250, 300, colors[4]));
 }
 

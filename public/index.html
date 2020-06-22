@@ -5,54 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Shared Canvas</title>
     <style>
-      html, body {
-  margin: 0;
-  padding: 0;
-  user-select: none;
-  position: fixed;
-  color: #999;
-  font-family: Arial;
-  font-size: 1.5rem;
-  background-color: #222;
-}
-p {
-  margin: 0.6rem;
-  padding-bottom: 1rem;
-}
-      
-button {
-  background-color: #555555; /* Green */
-  border: none;
-  color: greenyellow;
-  padding: 8px 24px;
-  text-align: center;
-  margin:12px 12px -12px 12px;
-  text-decoration: none;
-  font-size: 48px;
-  cursor: pointer;
-}
-      
-canvas {
-	position: fixed;
-}
-#creator {
-  position: fixed;
-  font-size: 1rem;
-  font-style: italic;
-  right: 10px;
-  bottom: 5px;
-  color: rgb(200, 200, 200);
-}
-  </style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        user-select: none;
+        position: fixed;
+        color: #999;
+        font-family: Arial;
+        font-size: 1.5rem;
+        background-color: #222;
+      }
+      p {
+        margin: 0.6rem;
+        padding-bottom: 1rem;
+      }
+
+      button {
+        background-color: #555555; /* Green */
+        border: none;
+        color: greenyellow;
+        padding: 8px 24px;
+        text-align: center;
+        margin: 12px 12px -12px 12px;
+        text-decoration: none;
+        font-size: 48px;
+        cursor: pointer;
+      }
+
+      canvas {
+        position: fixed;
+      }
+      #creator {
+        position: fixed;
+        font-size: 1rem;
+        font-style: italic;
+        right: 10px;
+        bottom: 5px;
+        color: rgb(200, 200, 200);
+      }
+    </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <!-- <script src="./shapes/index.js"></script> -->
     <script src="./tangram.js"></script>
   </head>
 
   <body>
-  	<p>
-	  <button  onClick="tcw()">↻</button>
-      <button  onClick="tccw()">↺</button>
+    <p>
+      <button onClick="tcw()">↻</button>
+      <button onClick="tccw()">↺</button>
     </p>
   </body>
 </html>

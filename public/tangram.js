@@ -144,8 +144,8 @@ var colors = [
 var shapes = [];
 
 function setup() {
-  const w = 600;
-  const h = 400;
+  const w = 800;
+  const h = 600;
 
   if (isDevEnv) {
     socket = io.connect(HOST);

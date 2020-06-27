@@ -221,13 +221,25 @@ function mouseDragged() {
 }
 
 function tcw() {
-  if (lastShape) lastShape.rotateCW();  
+  if (lastShape) lastShape.rotateCW();
+    const data = {
+    id: lastShape.id,
+    x: lastShape.pos.x,
+    y: lastShape.pos.y,
+    z: lastShape.angle,
+  };
       socket.emit('mouse', data);
-
 }
 
 function tccw() {
   if (lastShape) lastShape.rotateCCW();
+     const data = {
+    id: lastShape.id,
+    x: lastShape.pos.x,
+    y: lastShape.pos.y,
+    z: lastShape.angle,
+  };
+      socket.emit('mouse', data);
 }
 
 function flip() {

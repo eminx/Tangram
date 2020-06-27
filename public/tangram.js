@@ -21,7 +21,27 @@ class Shape {
   rotateCCW() {
     this.angle -= PI / 4;
   }
+  flipper(){
+    this.scale(-1.0, 1);
+    console.log('yolo');
+  }    
 }
+
+class Circul extends Shape {
+  show() {
+    super.show();
+    push();
+    this.radius = 30;
+    translate(this.pos.x, this.pos.y);
+    rotate(this.angle);
+    circle(0, 0, 30);
+    fill(10, 0);
+    circle(0, 0, this.radius);
+    translate(-this.pos.x, -this.pos.y);
+    pop();
+  }
+}
+
 
 class Rectan extends Shape {
   show() {
@@ -118,7 +138,7 @@ var colors = [
   'red',
   'green',
   'blue',
-  'yellow',
+  'white',
   'rgba(255,165,0,0.8)',
   'purple',
   'pink',
@@ -140,17 +160,19 @@ function setup() {
   angleMode(RADIANS);
   rectMode(CENTER);
   noStroke();
-  shapes.push(new Triangle(1, 350, 150, colors[4], 'big'));
-  shapes.push(new Triangle(2, 100, 300, colors[4], 'big'));
-  shapes.push(new Triangle(3, 100, 150, colors[4], 'medium'));
-  shapes.push(new Rectan(4, 200, 200, colors[4]));
-  shapes.push(new Triangle(5, 250, 50, colors[4], 'small'));
-  shapes.push(new Triangle(6, 100, 50, colors[4], 'small'));
-  shapes.push(new Quadri(7, 250, 300, colors[4]));
+  shapes.push(new Circul(1, 250, 250, colors[3]));
+  shapes.push(new Circul(2, 350, 250, colors[3]));
+  shapes.push(new Triangle(3, 350, 150, colors[4], 'big'));
+  shapes.push(new Triangle(4, 100, 300, colors[4], 'big'));
+  shapes.push(new Triangle(5, 100, 150, colors[4], 'medium'));
+  shapes.push(new Rectan(6, 200, 200, colors[4]));
+  shapes.push(new Triangle(7, 250, 50, colors[4], 'small'));
+  shapes.push(new Triangle(8, 100, 50, colors[4], 'small'));
+  shapes.push(new Quadri(9, 250, 300, colors[4]));
 }
 
 function draw() {
-  background(0);
+  background(100);
   for (let shape of shapes) {
     shape.show();
   }
@@ -160,13 +182,14 @@ function reDrawShape(data) {
   const shapeMoved = shapes.find((shape) => shape.id === data.id);
   shapeMoved.pos.x = data.x;
   shapeMoved.pos.y = data.y;
+  shapeMoved.angle = data.z;    
 }
 
 let lastShape;
 function putShapeInFront() {
   shapes.push(shapeSelected);
   shapes.splice(shapes.indexOf(shapeSelected), 1);
-  lastShape = shapes[6];
+  lastShape = shapes[8];
 }
 
 let shapeSelected = false;
@@ -192,13 +215,22 @@ function mouseDragged() {
     id: shapeSelected.id,
     x: mouseX,
     y: mouseY,
+    z: shapeSelected.angle,
   };
   socket.emit('mouse', data);
 }
 
 function tcw() {
-  if (lastShape) lastShape.rotateCW();
+  if (lastShape) lastShape.rotateCW();  
+      socket.emit('mouse', data);
+
 }
+
 function tccw() {
   if (lastShape) lastShape.rotateCCW();
+}
+
+function flip() {
+  if (lastShape) lastShape.flipper;
+
 }

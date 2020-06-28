@@ -25,10 +25,10 @@ class Shape {
     this.angle -= PI / 4;
   }
     
- flipper(){
-     this.skala = -1;
-  }     
-}
+// flipper(){
+//     this.skala = -1;
+//  }     
+ }
 
 
 class Circul extends Shape {
@@ -73,8 +73,8 @@ class Quadri extends Shape {
     fill(10, 0);
     circle(0, 0, this.radius);
     translate(-this.pos.x, -this.pos.y);
-    scale(this.skala, 1);
-      pop();
+//    scale(this.skala, 1);
+    pop();
   }
 }
 
@@ -256,9 +256,7 @@ function tccw() {
       socket.emit('mouse', data);
 }
 
-function flip() {
-  if (lastShape) lastShape.flipper;
-console.log (lastShape.skala)
-             
-
-}
+// function flip() {
+//  if (lastShape) lastShape.flipper;
+// console.log (lastShape.skala)             
+//}

@@ -2,15 +2,17 @@
 
 // Base class that does all the common operations.
 class Shape {
-  constructor(id, x, y, color, size) {
+  constructor(id, x, y, color, size, skala) {
     this.id = id;
     this.pos = createVector(x, y);
     this.color = color;
     this.angle = 0;
     this.radius = 30;
     this.size = size;
+    this.skala = 1;
   }
-    
+   
+       
   show() {
     noStroke();
     fill(this.color);
@@ -23,10 +25,11 @@ class Shape {
     this.angle -= PI / 4;
   }
     
-  flipper(){
-    console.log('yolo');
-  }    
+ flipper(){
+     this.skala = -1;
+  }     
 }
+
 
 class Circul extends Shape {
   show() {
@@ -34,7 +37,7 @@ class Circul extends Shape {
     push();
     this.radius = 30;
     translate(this.pos.x, this.pos.y);
-    rotate(this.angle);
+    rotate(this.angle);    
     circle(0, 0, 30);
     fill(10, 0);
     circle(0, 0, this.radius);
@@ -70,7 +73,8 @@ class Quadri extends Shape {
     fill(10, 0);
     circle(0, 0, this.radius);
     translate(-this.pos.x, -this.pos.y);
-    pop();
+    scale(this.skala, 1);
+      pop();
   }
 }
 
@@ -92,7 +96,7 @@ class Triangle extends Shape {
       push();
       this.radius = 45;
       translate(this.pos.x, this.pos.y);
-      rotate(this.angle);
+      rotate(this.angle);    
       triangle(
         -10 * sqrt(50),
         -5 * sqrt(50),
@@ -136,19 +140,19 @@ let clr;
 let socket;
 
 var colors = [
- 'red',
+  'red',
+  'rgba(62,216,187,0.8)',
   'rgba(255,88,88,0.8)',
-  'blue',
   'rgba(255,189,155,1)',
-  'rgba(255,88,88,0.8)',
+  'rgba(255,165,0,0.8)',
   'purple',
   'pink',
 ];
 var shapes = [];
 
 function setup() {
-  const w = 800;
-  const h = 600;
+  const w = 1200;
+  const h = 900;
 
   if (isDevEnv) {
     socket = io.connect(HOST);
@@ -161,15 +165,24 @@ function setup() {
   angleMode(RADIANS);
   rectMode(CENTER);
   noStroke();
-  shapes.push(new Circul(1, 250, 250, colors[3]));
-  shapes.push(new Circul(2, 350, 250, colors[3]));
-  shapes.push(new Triangle(3, 350, 150, colors[1], 'big'));
-  shapes.push(new Triangle(4, 100, 300, colors[1], 'big'));
-  shapes.push(new Triangle(5, 100, 150, colors[1], 'medium'));
-  shapes.push(new Rectan(6, 200, 200, colors[1]));
-  shapes.push(new Triangle(7, 250, 50, colors[1], 'small'));
-  shapes.push(new Triangle(8, 100, 50, colors[1], 'small'));
-  shapes.push(new Quadri(9, 250, 300, colors[1]));
+  shapes.push(new Circul(1, 250, 450, colors[3]));
+  shapes.push(new Circul(2, 350, 450, colors[3]));
+  shapes.push(new Triangle(3, 350, 350, colors[1], 'big'));
+  shapes.push(new Triangle(4, 100, 500, colors[1], 'big'));
+  shapes.push(new Triangle(5, 100, 350, colors[1], 'medium'));
+  shapes.push(new Rectan(6, 200, 400, colors[1]));
+  shapes.push(new Triangle(7, 250, 250, colors[1], 'small'));
+  shapes.push(new Triangle(8, 100, 250, colors[1], 'small'));
+  shapes.push(new Quadri(9, 250, 500, colors[1]));
+  shapes.push(new Circul(10, 650, 550, colors[3]));
+  shapes.push(new Circul(11, 750, 450, colors[3]));
+  shapes.push(new Triangle(12, 750, 350, colors[2], 'big'));
+  shapes.push(new Triangle(13, 500, 500, colors[2], 'big'));
+  shapes.push(new Triangle(14, 500, 350, colors[2], 'medium'));
+  shapes.push(new Rectan(15, 600, 400, colors[2]));
+  shapes.push(new Triangle(16, 650, 250, colors[2], 'small'));
+  shapes.push(new Triangle(17, 500, 250, colors[2], 'small'));
+  shapes.push(new Quadri(18, 650, 500, colors[2]));
 }
 
 function draw() {
@@ -190,7 +203,7 @@ let lastShape;
 function putShapeInFront() {
   shapes.push(shapeSelected);
   shapes.splice(shapes.indexOf(shapeSelected), 1);
-  lastShape = shapes[8];
+  lastShape = shapes[17];
 }
 
 let shapeSelected = false;
@@ -245,5 +258,7 @@ function tccw() {
 
 function flip() {
   if (lastShape) lastShape.flipper;
+console.log (lastShape.skala)
+             
 
 }

@@ -10,7 +10,6 @@ class Shape {
     this.radius = 30;
     this.size = size;
   }
-    
   show() {
     noStroke();
     fill(this.color);
@@ -24,6 +23,7 @@ class Shape {
   }
     
   flipper(){
+    this.scale(-1, 1);
     console.log('yolo');
   }    
 }
@@ -136,11 +136,11 @@ let clr;
 let socket;
 
 var colors = [
- 'red',
-  'rgba(255,88,88,0.8)',
+  'red',
+  'rgba(62,216,187,0.8)',
   'blue',
   'rgba(255,189,155,1)',
-  'rgba(255,88,88,0.8)',
+  'rgba(255,165,0,0.8)',
   'purple',
   'pink',
 ];

@@ -161,15 +161,15 @@ function setup() {
   angleMode(RADIANS);
   rectMode(CENTER);
   noStroke();
-  shapes.push(new Circul(1, 250, 250, colors[3]));
-  shapes.push(new Circul(2, 350, 250, colors[3]));
-  shapes.push(new Triangle(3, 350, 150, colors[1], 'big'));
-  shapes.push(new Triangle(4, 100, 300, colors[1], 'big'));
-  shapes.push(new Triangle(5, 100, 150, colors[1], 'medium'));
-  shapes.push(new Rectan(6, 200, 200, colors[1]));
-  shapes.push(new Triangle(7, 250, 50, colors[1], 'small'));
-  shapes.push(new Triangle(8, 100, 50, colors[1], 'small'));
-  shapes.push(new Quadri(9, 250, 300, colors[1]));
+  shapes.push(new Circul(10, 250, 250, colors[3]));
+  shapes.push(new Circul(11, 350, 250, colors[3]));
+  shapes.push(new Triangle(12, 350, 150, colors[1], 'big'));
+  shapes.push(new Triangle(13, 100, 300, colors[1], 'big'));
+  shapes.push(new Triangle(14, 100, 150, colors[1], 'medium'));
+  shapes.push(new Rectan(15, 200, 200, colors[1]));
+  shapes.push(new Triangle(16, 250, 50, colors[1], 'small'));
+  shapes.push(new Triangle(17, 100, 50, colors[1], 'small'));
+  shapes.push(new Quadri(18, 250, 300, colors[1]));
 }
 
 function draw() {

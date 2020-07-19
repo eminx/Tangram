@@ -263,27 +263,26 @@ function mouseDragged() {
   };
   socket.emit('moveShape', data);
   socket.emit('mouse', data);    
-
 }
 
 function tcw() {
-  if (lastShape) lastShape.rotateCW();
+  if (shapeSelected) shapeSelected.rotateCW();
     const data = {
-    id: lastShape.id,
-    x: lastShape.pos.x,
-    y: lastShape.pos.y,
-    z: lastShape.angle,
+    id: shapeSelected.id,
+    x: shapeSelected.pos.x,
+    y: shapeSelected.pos.y,
+    z: shapeSelected.angle,
   };
       socket.emit('moveShape', data);
 }
 
 function tccw() {
-  if (lastShape) lastShape.rotateCCW();
+  if (shapeSelected) shapeSelected.rotateCCW();
      const data = {
-    id: lastShape.id,
-    x: lastShape.pos.x,
-    y: lastShape.pos.y,
-    z: lastShape.angle,
+    id: shapeSelected.id,
+    x: shapeSelected.pos.x,
+    y: shapeSelected.pos.y,
+    z: shapeSelected.angle,
   };
       socket.emit('moveShape', data);
 }

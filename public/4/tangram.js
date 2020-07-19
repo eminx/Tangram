@@ -149,6 +149,8 @@ var colors = [
   'pink',
 ];
 var shapes = [];
+var otherPointerPosition = {x:-1, y:-1};
+
 
 function setup() {
   const w = 1200;
@@ -159,7 +161,9 @@ function setup() {
   } else {
     socket = io.connect();
   }
-  socket.on('mouse', reDrawShape);
+  //socket.on('mouse', reDrawShape);
+  socket.on('mouse', otherPointers);
+  socket.on('moveShape', reDrawShape);
 
   createCanvas(w, h);
   angleMode(RADIANS);
@@ -187,24 +191,30 @@ function setup() {
 
 function draw() {
     background('#FFF4EE');
-    fill(200);
-    ellipse(mouseX, mouseY, 20,20);    
   for (let shape of shapes) {
     shape.show();
-  }
+  };
+  fill(150);
+ellipse(otherPointerPosition.x, otherPointerPosition.y, 20, 20);
 }
 
 function reDrawShape(data) {
   const shapeMoved = shapes.find((shape) => shape.id === data.id);
   shapeMoved.pos.x = data.x;
   shapeMoved.pos.y = data.y;
-  shapeMoved.angle = data.z;    
+  shapeMoved.angle = data.z;
+  putShapeInFront(shapeMoved);
+  console.log(data);
+}
+
+function otherPointers(data) {
+  otherPointerPosition = data;
 }
 
 let lastShape;
-function putShapeInFront() {
-  shapes.push(shapeSelected);
-  shapes.splice(shapes.indexOf(shapeSelected), 1);
+function putShapeInFront(shape) {
+  shapes.push(shape);
+  shapes.splice(shapes.indexOf(shape), 1);
   lastShape = shapes[17];
 }
 
@@ -217,16 +227,32 @@ function mousePressed() {
         abs(mouseY - shape.pos.y) < shape.radius / 1
       );
     }) || false;
-  putShapeInFront();
+    
+    
+putShapeInFront(shapeSelected);
+const data = {
+    id: shapeSelected.id,
+    x: shapeSelected.pos.x,
+    y: shapeSelected.pos.y,
+    z: shapeSelected.angle,
+  };
+socket.emit('moveShape', data);
+
 }
 
 function mouseReleased() {
   shapeSelected = false;
 }
 
+function mouseMoved() {
+    const data = {
+    x: mouseX,
+    y: mouseY,
+  };
+  socket.emit('mouse', data);    
+}
+
 function mouseDragged() {
-  fill(150);
-  ellipse(mouseX, mouseY, 20,20);    
   shapeSelected ? (shapeSelected.pos.x = mouseX) : null;
   shapeSelected ? (shapeSelected.pos.y = mouseY) : null;
   const data = {
@@ -235,7 +261,9 @@ function mouseDragged() {
     y: mouseY,
     z: shapeSelected.angle,
   };
-  socket.emit('mouse', data);
+  socket.emit('moveShape', data);
+  socket.emit('mouse', data);    
+
 }
 
 function tcw() {
@@ -246,7 +274,7 @@ function tcw() {
     y: lastShape.pos.y,
     z: lastShape.angle,
   };
-      socket.emit('mouse', data);
+      socket.emit('moveShape', data);
 }
 
 function tccw() {
@@ -257,7 +285,7 @@ function tccw() {
     y: lastShape.pos.y,
     z: lastShape.angle,
   };
-      socket.emit('mouse', data);
+      socket.emit('moveShape', data);
 }
 
 // function flip() {

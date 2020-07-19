@@ -215,12 +215,13 @@ let lastShape;
 function putShapeInFront(shape) {
   shapes.push(shape);
   shapes.splice(shapes.indexOf(shape), 1);
-  lastShape = shapes[17];
+  lastShape = shapes[shapes.length -1];
 }
 
+let clickedShape = false;
 let shapeSelected = false;
 function mousePressed() {
-  shapeSelected =
+    clickedShape = 
     shapes.find((shape) => {
       return (
         abs(mouseX - shape.pos.x) < shape.radius / 1 &&
@@ -228,20 +229,27 @@ function mousePressed() {
       );
     }) || false;
     
+    if (clickedShape){        
+    shapeSelected = clickedShape;
     
-putShapeInFront(shapeSelected);
+putShapeInFront(shapeSelected)
+    
+//lastShape = shapeSelected;    
+    
 const data = {
-    id: shapeSelected.id,
+    id:shapeSelected.id,
     x: shapeSelected.pos.x,
     y: shapeSelected.pos.y,
     z: shapeSelected.angle,
   };
 socket.emit('moveShape', data);
-
 }
+    };
 
 function mouseReleased() {
-  shapeSelected = false;
+  //shapeSelected = false;
+  clickedShape = false;
+
 }
 
 function mouseMoved() {
@@ -253,6 +261,7 @@ function mouseMoved() {
 }
 
 function mouseDragged() {
+    if (clickedShape) {        
   shapeSelected ? (shapeSelected.pos.x = mouseX) : null;
   shapeSelected ? (shapeSelected.pos.y = mouseY) : null;
   const data = {
@@ -260,12 +269,14 @@ function mouseDragged() {
     x: mouseX,
     y: mouseY,
     z: shapeSelected.angle,
-  };
-  socket.emit('moveShape', data);
+  };        
+  socket.emit('moveShape', data);  
+    }
   socket.emit('mouse', data);    
 }
 
 function tcw() {
+    console.log({shapeSelected});
   if (shapeSelected) shapeSelected.rotateCW();
     const data = {
     id: shapeSelected.id,
@@ -278,7 +289,8 @@ function tcw() {
 
 function tccw() {
   if (shapeSelected) shapeSelected.rotateCCW();
-     const data = {
+    
+    const data = {
     id: shapeSelected.id,
     x: shapeSelected.pos.x,
     y: shapeSelected.pos.y,

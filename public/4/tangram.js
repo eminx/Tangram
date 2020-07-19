@@ -272,7 +272,11 @@ function mouseDragged() {
   };        
   socket.emit('moveShape', data);  
     }
-  socket.emit('mouse', data);    
+    const mouseData = {
+        x: mouseX,
+        y: mouseY,
+    } 
+  socket.emit('mouse', mouseData);    
 }
 
 function tcw() {

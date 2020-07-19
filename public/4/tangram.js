@@ -186,8 +186,9 @@ function setup() {
 }
 
 function draw() {
-  ellipse(mouseX, mouseY, 20,20);    
-  background('#FFF4EE');
+    background('#FFF4EE');
+    fill(200);
+    ellipse(mouseX, mouseY, 20,20);    
   for (let shape of shapes) {
     shape.show();
   }
@@ -224,6 +225,7 @@ function mouseReleased() {
 }
 
 function mouseDragged() {
+  fill(150);
   ellipse(mouseX, mouseY, 20,20);    
   shapeSelected ? (shapeSelected.pos.x = mouseX) : null;
   shapeSelected ? (shapeSelected.pos.y = mouseY) : null;

@@ -19,4 +19,9 @@ function newConnection(socket) {
   function mouseMsg(data) {
     socket.broadcast.emit('mouse', data);
   }
+    
+  socket.on('moveShape', shapeUpdate);
+  function shapeUpdate(data) {
+    socket.broadcast.emit('moveShape', data);  
+  }
 }

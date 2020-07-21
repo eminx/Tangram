@@ -161,15 +161,25 @@ function setup() {
   angleMode(RADIANS);
   rectMode(CENTER);
   noStroke();
-  shapes.push(new Circul(1, 250, 250, colors[3]));
-  shapes.push(new Circul(2, 350, 250, colors[3]));
-  shapes.push(new Triangle(3, 350, 150, colors[1], 'big'));
-  shapes.push(new Triangle(4, 100, 300, colors[1], 'big'));
-  shapes.push(new Triangle(5, 100, 150, colors[1], 'medium'));
-  shapes.push(new Rectan(6, 200, 200, colors[1]));
-  shapes.push(new Triangle(7, 250, 50, colors[1], 'small'));
-  shapes.push(new Triangle(8, 100, 50, colors[1], 'small'));
-  shapes.push(new Quadri(9, 250, 300, colors[1]));
+ shapes.push(new Circul(201, 250, 250, colors[3]));
+  shapes.push(new Circul(202, 350, 250, colors[3]));
+  shapes.push(new Diamond(203, 100, 150, colors[2]));
+shapes.push(new Triangle(204, 300, 350, colors[2], 'big'));
+  shapes.push(new Triangle(205, 100, 500, colors[2], 'big'));
+  shapes.push(new Triangle(206, 100, 350, colors[2], 'medium'));
+  shapes.push(new Triangle(207, 250, 250, colors[2], 'small'));
+  shapes.push(new Triangle(208, 100, 250, colors[2], 'small'));
+  shapes.push(new Triangle(209, 100, 75, colors[2], 'xsmall'));
+  shapes.push(new Triangle(210, 150, 75, colors[2], 'xsmall'));
+  shapes.push(new Rectan(211, 350, 250, colors[2], 'big'));
+  shapes.push(new Rectan(212, 200, 150, colors[2], 'medium'));
+  shapes.push(new Rectan(213, 100, 50, colors[2],'small'));
+  shapes.push(new Rectan(214, 150, 50, colors[2],'small'));
+  shapes.push(new Rectan(215, 200, 50, colors[2],'small'));
+  shapes.push(new Rectan(216, 250, 50, colors[2],'small'));
+  shapes.push(new Rectan(217, 300, 50, colors[2],'rect'));    
+  shapes.push(new Quadri(218, 250, 500, colors[2], 'big'));
+  shapes.push(new Quadri(219, 300, 150, colors[2], 'small'));
 }
 
 function draw() {

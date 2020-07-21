@@ -200,11 +200,12 @@ function reDrawShape(data) {
 }
 
 let lastShape;
-function putShapeInFront() {
-  shapes.push(shapeSelected);
-  shapes.splice(shapes.indexOf(shapeSelected), 1);
-  lastShape = shapes[17];
+function putShapeInFront(shape) {
+  shapes.push(shape);
+  shapes.splice(shapes.indexOf(shape), 1);
+  lastShape = shapes[shapes.length -1];
 }
+
 
 let shapeSelected = false;
 function mousePressed() {

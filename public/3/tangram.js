@@ -11,8 +11,7 @@ class Shape {
     this.size = size;
     this.skala = 1;
   }
-   
-       
+          
   show() {
     noStroke();
     fill(this.color);
@@ -30,6 +29,36 @@ class Shape {
 //  }     
  }
 
+const hcoff = Math.sqrt(50);
+const hcoff2 = Math.sqrt(2);
+
+class Diamond extends Shape {
+  show() {
+    super.show();
+    push();
+    this.radius = 35;
+    translate(this.pos.x, this.pos.y);
+    rotate(this.angle);
+beginShape();
+vertex(5/3 * hcoff, 5 * hcoff);
+vertex(5/3 * hcoff, 5/3 * hcoff);
+vertex(5 * hcoff, 5/3 * hcoff);
+vertex(5 * hcoff, -5/3 * hcoff);
+vertex(5/3 * hcoff, -5/3 * hcoff);
+vertex(5/3 * hcoff, -5 * hcoff);
+vertex(-5/3 * hcoff, -5 * hcoff);
+vertex(-5/3 * hcoff, -5/3 * hcoff);      
+vertex(-5 * hcoff, -5/3 * hcoff);
+vertex(-5 * hcoff, 5/3 * hcoff);
+vertex(-5/3 * hcoff, 5/3 * hcoff);
+vertex(-5/3 * hcoff, 5 * hcoff);      
+endShape();      
+    fill(10, 0);
+    circle(0, 0, this.radius);
+    translate(-this.pos.x, -this.pos.y);
+    pop();
+  }
+}
 
 class Circul extends Shape {
   show() {
@@ -51,14 +80,47 @@ class Rectan extends Shape {
   show() {
     super.show();
     push();
+    if (this.size == 'big') {
     this.radius = 45;
     translate(this.pos.x, this.pos.y);
     rotate(this.angle);
-    rect(0, 0, 10 * sqrt(50), 10 * sqrt(50));
+    rect(0, 0, 10 * hcoff, 10 * hcoff);
     fill(10, 0);
     circle(0, 0, this.radius);
     translate(-this.pos.x, -this.pos.y);
     pop();
+    }
+    if (this.size == 'medium') {
+    this.radius = 30;
+    translate(this.pos.x, this.pos.y);
+    rotate(this.angle);
+    rect(0, 0, 5 * hcoff, 5 * hcoff);
+    fill(10, 0);
+    circle(0, 0, this.radius);
+    translate(-this.pos.x, -this.pos.y);
+    pop();
+    } 
+    if (this.size == 'small') {
+    this.radius = 15;
+    translate(this.pos.x, this.pos.y);
+    rotate(this.angle);
+    rect(0, 0, 2.5 * hcoff, 2.5 * hcoff);
+    fill(10, 0);
+    circle(0, 0, this.radius);
+    translate(-this.pos.x, -this.pos.y);
+    pop();
+    } 
+     if (this.size == 'rect') {
+    this.radius = 15;
+    translate(this.pos.x, this.pos.y);
+    rotate(this.angle);
+    rect(0, 0, 10/4 * hcoff, 10 * hcoff);
+    fill(10, 0);
+    circle(0, 0, this.radius);
+    translate(-this.pos.x, -this.pos.y);
+    pop();
+    }      
+        
   }
 }
 
@@ -66,6 +128,7 @@ class Quadri extends Shape {
   show() {
     super.show();
     push();
+          if (this.size == 'big') {
     this.radius = 45;
     translate(this.pos.x, this.pos.y);
     rotate(this.angle);
@@ -73,8 +136,19 @@ class Quadri extends Shape {
     fill(10, 0);
     circle(0, 0, this.radius);
     translate(-this.pos.x, -this.pos.y);
-//    scale(this.skala, 1);
     pop();
+    }
+       if (this.size == 'small') {
+    this.radius = 25;
+    translate(this.pos.x, this.pos.y);
+    rotate(this.angle);
+    quad(-25/2, -25/2, 75/2, -25/2, 25/2, 25/2, -75/2, 25/2);
+    fill(10, 0);
+    circle(0, 0, this.radius);
+    translate(-this.pos.x, -this.pos.y);
+    pop();
+    }
+      
   }
 }
 
@@ -98,24 +172,36 @@ class Triangle extends Shape {
       translate(this.pos.x, this.pos.y);
       rotate(this.angle);    
       triangle(
-        -10 * sqrt(50),
-        -5 * sqrt(50),
-        10 * sqrt(50),
-        -5 * sqrt(50),
+        -10 * hcoff,
+        -5 * hcoff,
+        10 * hcoff,
+        -5 * hcoff,
         0,
-        5 * sqrt(50)
+        5 * hcoff
       );
       fill(10, 0);
       circle(0, -5, this.radius);
       translate(-this.pos.x, -this.pos.y);
       pop();
     }
+          
     if (this.size == 'small') {
       push();
       this.radius = 35;
       translate(this.pos.x, this.pos.y);
       rotate(this.angle);
       triangle(-50, -25, 50, -25, 0, 25);
+      fill(10, 0);
+      circle(0, -5, this.radius);
+      translate(-this.pos.x, -this.pos.y);
+      pop();
+    }
+       if (this.size == 'xsmall') {
+      push();
+      this.radius = 20;
+      translate(this.pos.x, this.pos.y);
+      rotate(this.angle);
+      triangle(-10 * hcoff2, -5 * hcoff2, 10 * hcoff2, -5 * hcoff2, 0, 5 * hcoff2);
       fill(10, 0);
       circle(0, -5, this.radius);
       translate(-this.pos.x, -this.pos.y);
@@ -141,14 +227,16 @@ let socket;
 
 var colors = [
   'red',
-  'rgba(62,216,187,0.8)',
-  'rgba(255,88,88,0.8)',
-  'rgba(255,189,155,1)',
-  'rgba(255,165,0,0.8)',
+  'rgba(62,216,187,0.7)',
+  'rgba(255,88,88,0.7)',
+  'rgba(255,189,155,0.7)',
+  'rgba(255,165,0,0.7)',
   'purple',
   'pink',
 ];
 var shapes = [];
+var otherPointerPosition = {x:-1, y:-1};
+
 
 function setup() {
   const w = 1200;
@@ -159,44 +247,55 @@ function setup() {
   } else {
     socket = io.connect();
   }
-  socket.on('mouse', reDrawShape);
+  //socket.on('mouse', reDrawShape);
+  socket.on('mouse', otherPointers);
+  socket.on('moveShape', reDrawShape);
 
   createCanvas(w, h);
   angleMode(RADIANS);
   rectMode(CENTER);
   noStroke();
-  shapes.push(new Circul(1, 250, 450, colors[3]));
-  shapes.push(new Circul(2, 350, 450, colors[3]));
-  shapes.push(new Triangle(3, 350, 350, colors[1], 'big'));
-  shapes.push(new Triangle(4, 100, 500, colors[1], 'big'));
-  shapes.push(new Triangle(5, 100, 350, colors[1], 'medium'));
-  shapes.push(new Rectan(6, 200, 400, colors[1]));
-  shapes.push(new Triangle(7, 250, 250, colors[1], 'small'));
-  shapes.push(new Triangle(8, 100, 250, colors[1], 'small'));
-  shapes.push(new Quadri(9, 250, 500, colors[1]));
-  shapes.push(new Circul(10, 650, 550, colors[3]));
-  shapes.push(new Circul(11, 750, 450, colors[3]));
-  shapes.push(new Triangle(12, 750, 350, colors[2], 'big'));
-  shapes.push(new Triangle(13, 500, 500, colors[2], 'big'));
-  shapes.push(new Triangle(14, 500, 350, colors[2], 'medium'));
-  shapes.push(new Rectan(15, 600, 400, colors[2]));
-  shapes.push(new Triangle(16, 650, 250, colors[2], 'small'));
-  shapes.push(new Triangle(17, 500, 250, colors[2], 'small'));
-  shapes.push(new Quadri(18, 650, 500, colors[2]));
-}
+  shapes.push(new Diamond(101, 100, 150, colors[2]));
+  shapes.push(new Circul(103, 250, 450, colors[3]));
+  shapes.push(new Circul(104, 350, 450, colors[3]));
+  shapes.push(new Triangle(105, 300, 350, colors[2], 'big'));
+  shapes.push(new Triangle(106, 100, 500, colors[2], 'big'));
+  shapes.push(new Triangle(107, 100, 350, colors[2], 'medium'));
+  shapes.push(new Triangle(108, 250, 250, colors[2], 'small'));
+  shapes.push(new Triangle(109, 100, 250, colors[2], 'small'));
+  shapes.push(new Triangle(110, 100, 75, colors[2], 'xsmall'));
+  shapes.push(new Triangle(111, 150, 75, colors[2], 'xsmall'));
+  shapes.push(new Rectan(112, 350, 250, colors[2], 'big'));
+  shapes.push(new Rectan(113, 200, 150, colors[2], 'medium'));
+  shapes.push(new Rectan(114, 100, 50, colors[2],'small'));
+  shapes.push(new Rectan(115, 150, 50, colors[2],'small'));
+  shapes.push(new Rectan(116, 200, 50, colors[2],'small'));
+  shapes.push(new Rectan(117, 250, 50, colors[2],'small'));
+  shapes.push(new Rectan(118, 300, 50, colors[2],'rect'));    
+  shapes.push(new Quadri(119, 250, 500, colors[2], 'big'));
+  shapes.push(new Quadri(120, 300, 150, colors[2], 'small'));
+ }
 
 function draw() {
-  background('#FFF4EE');
+    background('#FFF4EE');
   for (let shape of shapes) {
     shape.show();
-  }
+  };
+  fill(150);
+ellipse(otherPointerPosition.x, otherPointerPosition.y, 20, 20);
 }
 
 function reDrawShape(data) {
   const shapeMoved = shapes.find((shape) => shape.id === data.id);
   shapeMoved.pos.x = data.x;
   shapeMoved.pos.y = data.y;
-  shapeMoved.angle = data.z;    
+  shapeMoved.angle = data.z;
+  putShapeInFront(shapeMoved);
+  console.log(data);
+}
+
+function otherPointers(data) {
+  otherPointerPosition = data;
 }
 
 let lastShape;
@@ -206,24 +305,50 @@ function putShapeInFront(shape) {
   lastShape = shapes[shapes.length -1];
 }
 
-
+let clickedShape = false;
 let shapeSelected = false;
 function mousePressed() {
-  shapeSelected =
+    clickedShape = 
     shapes.find((shape) => {
       return (
         abs(mouseX - shape.pos.x) < shape.radius / 1 &&
         abs(mouseY - shape.pos.y) < shape.radius / 1
       );
     }) || false;
-  putShapeInFront();
+    
+    if (clickedShape){        
+    shapeSelected = clickedShape;
+    
+putShapeInFront(shapeSelected)
+    
+//lastShape = shapeSelected;    
+    
+const data = {
+    id:shapeSelected.id,
+    x: shapeSelected.pos.x,
+    y: shapeSelected.pos.y,
+    z: shapeSelected.angle,
+  };
+socket.emit('moveShape', data);
 }
+    };
 
 function mouseReleased() {
-  shapeSelected = false;
+  //shapeSelected = false;
+  clickedShape = false;
+
+}
+
+function mouseMoved() {
+    const data = {
+    x: mouseX,
+    y: mouseY,
+  };
+  socket.emit('mouse', data);    
 }
 
 function mouseDragged() {
+    if (clickedShape) {        
   shapeSelected ? (shapeSelected.pos.x = mouseX) : null;
   shapeSelected ? (shapeSelected.pos.y = mouseY) : null;
   const data = {
@@ -231,30 +356,38 @@ function mouseDragged() {
     x: mouseX,
     y: mouseY,
     z: shapeSelected.angle,
-  };
-  socket.emit('mouse', data);
+  };        
+  socket.emit('moveShape', data);  
+    }
+    const mouseData = {
+        x: mouseX,
+        y: mouseY,
+    } 
+  socket.emit('mouse', mouseData);    
 }
 
 function tcw() {
-  if (lastShape) lastShape.rotateCW();
+    console.log({shapeSelected});
+  if (shapeSelected) shapeSelected.rotateCW();
     const data = {
-    id: lastShape.id,
-    x: lastShape.pos.x,
-    y: lastShape.pos.y,
-    z: lastShape.angle,
+    id: shapeSelected.id,
+    x: shapeSelected.pos.x,
+    y: shapeSelected.pos.y,
+    z: shapeSelected.angle,
   };
-      socket.emit('mouse', data);
+      socket.emit('moveShape', data);
 }
 
 function tccw() {
-  if (lastShape) lastShape.rotateCCW();
-     const data = {
-    id: lastShape.id,
-    x: lastShape.pos.x,
-    y: lastShape.pos.y,
-    z: lastShape.angle,
+  if (shapeSelected) shapeSelected.rotateCCW();
+    
+    const data = {
+    id: shapeSelected.id,
+    x: shapeSelected.pos.x,
+    y: shapeSelected.pos.y,
+    z: shapeSelected.angle,
   };
-      socket.emit('mouse', data);
+      socket.emit('moveShape', data);
 }
 
 // function flip() {

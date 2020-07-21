@@ -2,14 +2,16 @@
 
 // Base class that does all the common operations.
 class Shape {
-  constructor(id, x, y, color, size) {
+  constructor(id, x, y, color, size, skala) {
     this.id = id;
     this.pos = createVector(x, y);
     this.color = color;
     this.angle = 0;
     this.radius = 30;
     this.size = size;
+    this.skala = 1;
   }
+          
   show() {
     noStroke();
     fill(this.color);
@@ -22,11 +24,10 @@ class Shape {
     this.angle -= PI / 4;
   }
     
-  flipper(){
-    this.scale(-1, 1);
-    console.log('yolo');
-  }    
-}
+// flipper(){
+//     this.skala = -1;
+//  }     
+ }
 
 const hcoff = Math.sqrt(50);
 const hcoff2 = Math.sqrt(2);
@@ -209,7 +210,6 @@ class Triangle extends Shape {
   }
 }
 
-
 var isiOS = false;
 var agent = navigator.userAgent.toLowerCase();
 if (agent.indexOf('iphone') >= 0 || agent.indexOf('ipad') >= 0) {
@@ -227,65 +227,76 @@ let socket;
 
 var colors = [
   'red',
-  'rgba(62,216,187,0.8)',
-  'blue',
-  'rgba(255,189,155,1)',
-  'rgba(255,165,0,0.8)',
+  'rgba(62,216,187,0.7)',
+  'rgba(255,88,88,0.7)',
+  'rgba(255,189,155,0.7)',
+  'rgba(255,165,0,0.7)',
   'purple',
   'pink',
 ];
 var shapes = [];
+var otherPointerPosition = {x:-1, y:-1};
+
 
 function setup() {
-  const w = 800;
-  const h = 600;
+  const w = 1200;
+  const h = 900;
 
   if (isDevEnv) {
     socket = io.connect(HOST);
   } else {
     socket = io.connect();
   }
-  socket.on('mouse', reDrawShape);
+  //socket.on('mouse', reDrawShape);
+  socket.on('mouse', otherPointers);
+  socket.on('moveShape', reDrawShape);
 
   createCanvas(w, h);
   angleMode(RADIANS);
   rectMode(CENTER);
   noStroke();
-  shapes.push(new Circul(101, 250, 250, colors[3]));
-  shapes.push(new Circul(102, 350, 250, colors[3]));
-  shapes.push(new Diamond(103, 100, 150, colors[1]));
-shapes.push(new Triangle(104, 300, 350, colors[1], 'big'));
-  shapes.push(new Triangle(105, 100, 500, colors[1], 'big'));
-  shapes.push(new Triangle(106, 100, 350, colors[1], 'medium'));
-  shapes.push(new Triangle(107, 250, 250, colors[1], 'small'));
-  shapes.push(new Triangle(108, 100, 250, colors[1], 'small'));
-  shapes.push(new Triangle(109, 100, 75, colors[1], 'xsmall'));
-  shapes.push(new Triangle(110, 150, 75, colors[1], 'xsmall'));
-  shapes.push(new Rectan(111, 350, 250, colors[1], 'big'));
-  shapes.push(new Rectan(112, 200, 150, colors[1], 'medium'));
-  shapes.push(new Rectan(113, 100, 50, colors[1],'small'));
-  shapes.push(new Rectan(114, 150, 50, colors[1],'small'));
-  shapes.push(new Rectan(115, 200, 50, colors[1],'small'));
-  shapes.push(new Rectan(116, 250, 50, colors[1],'small'));
-  shapes.push(new Rectan(117, 300, 50, colors[1],'rect'));    
-  shapes.push(new Quadri(118, 250, 500, colors[1], 'big'));
-  shapes.push(new Quadri(119, 300, 150, colors[1], 'small'));
-}
+  shapes.push(new Diamond(201, 100, 150, colors[1]));
+  shapes.push(new Circul(203, 250, 450, colors[3]));
+  shapes.push(new Circul(204, 350, 450, colors[3]));
+  shapes.push(new Triangle(205, 300, 350, colors[1], 'big'));
+  shapes.push(new Triangle(206, 100, 500, colors[1], 'big'));
+  shapes.push(new Triangle(207, 100, 350, colors[1], 'medium'));
+  shapes.push(new Triangle(208, 250, 250, colors[1], 'small'));
+  shapes.push(new Triangle(209, 100, 250, colors[1], 'small'));
+  shapes.push(new Triangle(210, 100, 75, colors[1], 'xsmall'));
+  shapes.push(new Triangle(211, 150, 75, colors[1], 'xsmall'));
+  shapes.push(new Rectan(212, 350, 250, colors[1], 'big'));
+  shapes.push(new Rectan(213, 200, 150, colors[1], 'medium'));
+  shapes.push(new Rectan(214, 100, 50, colors[1],'small'));
+  shapes.push(new Rectan(215, 150, 50, colors[1],'small'));
+  shapes.push(new Rectan(216, 200, 50, colors[1],'small'));
+  shapes.push(new Rectan(217, 250, 50, colors[1],'small'));
+  shapes.push(new Rectan(218, 300, 50, colors[1],'rect'));    
+  shapes.push(new Quadri(219, 250, 500, colors[1], 'big'));
+  shapes.push(new Quadri(220, 300, 150, colors[1], 'small'));
+ }
 
 function draw() {
-  background('#FFF4EE');
+    background('#FFF4EE');
   for (let shape of shapes) {
     shape.show();
-  }
+  };
+  fill(150);
+ellipse(otherPointerPosition.x, otherPointerPosition.y, 20, 20);
 }
 
 function reDrawShape(data) {
   const shapeMoved = shapes.find((shape) => shape.id === data.id);
   shapeMoved.pos.x = data.x;
   shapeMoved.pos.y = data.y;
-  shapeMoved.angle = data.z;    
+  shapeMoved.angle = data.z;
+  putShapeInFront(shapeMoved);
+  console.log(data);
 }
 
+function otherPointers(data) {
+  otherPointerPosition = data;
+}
 
 let lastShape;
 function putShapeInFront(shape) {
@@ -294,23 +305,50 @@ function putShapeInFront(shape) {
   lastShape = shapes[shapes.length -1];
 }
 
+let clickedShape = false;
 let shapeSelected = false;
 function mousePressed() {
-  shapeSelected =
+    clickedShape = 
     shapes.find((shape) => {
       return (
         abs(mouseX - shape.pos.x) < shape.radius / 1 &&
         abs(mouseY - shape.pos.y) < shape.radius / 1
       );
     }) || false;
-  putShapeInFront();
+    
+    if (clickedShape){        
+    shapeSelected = clickedShape;
+    
+putShapeInFront(shapeSelected)
+    
+//lastShape = shapeSelected;    
+    
+const data = {
+    id:shapeSelected.id,
+    x: shapeSelected.pos.x,
+    y: shapeSelected.pos.y,
+    z: shapeSelected.angle,
+  };
+socket.emit('moveShape', data);
 }
+    };
 
 function mouseReleased() {
-  shapeSelected = false;
+  //shapeSelected = false;
+  clickedShape = false;
+
+}
+
+function mouseMoved() {
+    const data = {
+    x: mouseX,
+    y: mouseY,
+  };
+  socket.emit('mouse', data);    
 }
 
 function mouseDragged() {
+    if (clickedShape) {        
   shapeSelected ? (shapeSelected.pos.x = mouseX) : null;
   shapeSelected ? (shapeSelected.pos.y = mouseY) : null;
   const data = {
@@ -318,33 +356,41 @@ function mouseDragged() {
     x: mouseX,
     y: mouseY,
     z: shapeSelected.angle,
-  };
-  socket.emit('mouse', data);
+  };        
+  socket.emit('moveShape', data);  
+    }
+    const mouseData = {
+        x: mouseX,
+        y: mouseY,
+    } 
+  socket.emit('mouse', mouseData);    
 }
 
 function tcw() {
-  if (lastShape) lastShape.rotateCW();
+    console.log({shapeSelected});
+  if (shapeSelected) shapeSelected.rotateCW();
     const data = {
-    id: lastShape.id,
-    x: lastShape.pos.x,
-    y: lastShape.pos.y,
-    z: lastShape.angle,
+    id: shapeSelected.id,
+    x: shapeSelected.pos.x,
+    y: shapeSelected.pos.y,
+    z: shapeSelected.angle,
   };
-      socket.emit('mouse', data);
+      socket.emit('moveShape', data);
 }
 
 function tccw() {
-  if (lastShape) lastShape.rotateCCW();
-     const data = {
-    id: lastShape.id,
-    x: lastShape.pos.x,
-    y: lastShape.pos.y,
-    z: lastShape.angle,
+  if (shapeSelected) shapeSelected.rotateCCW();
+    
+    const data = {
+    id: shapeSelected.id,
+    x: shapeSelected.pos.x,
+    y: shapeSelected.pos.y,
+    z: shapeSelected.angle,
   };
-      socket.emit('mouse', data);
+      socket.emit('moveShape', data);
 }
 
-function flip() {
-  if (lastShape) lastShape.flipper;
-
-}
+// function flip() {
+//  if (lastShape) lastShape.flipper;
+// console.log (lastShape.skala)             
+//}

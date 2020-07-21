@@ -28,13 +28,44 @@ class Shape {
   }    
 }
 
+const hcoff = Math.sqrt(50);
+const hcoff2 = Math.sqrt(2);
+
+class Diamond extends Shape {
+  show() {
+    super.show();
+    push();
+    this.radius = 35;
+    translate(this.pos.x, this.pos.y);
+    rotate(this.angle);
+beginShape();
+vertex(5/3 * hcoff, 5 * hcoff);
+vertex(5/3 * hcoff, 5/3 * hcoff);
+vertex(5 * hcoff, 5/3 * hcoff);
+vertex(5 * hcoff, -5/3 * hcoff);
+vertex(5/3 * hcoff, -5/3 * hcoff);
+vertex(5/3 * hcoff, -5 * hcoff);
+vertex(-5/3 * hcoff, -5 * hcoff);
+vertex(-5/3 * hcoff, -5/3 * hcoff);      
+vertex(-5 * hcoff, -5/3 * hcoff);
+vertex(-5 * hcoff, 5/3 * hcoff);
+vertex(-5/3 * hcoff, 5/3 * hcoff);
+vertex(-5/3 * hcoff, 5 * hcoff);      
+endShape();      
+    fill(10, 0);
+    circle(0, 0, this.radius);
+    translate(-this.pos.x, -this.pos.y);
+    pop();
+  }
+}
+
 class Circul extends Shape {
   show() {
     super.show();
     push();
     this.radius = 30;
     translate(this.pos.x, this.pos.y);
-    rotate(this.angle);
+    rotate(this.angle);    
     circle(0, 0, 30);
     fill(10, 0);
     circle(0, 0, this.radius);
@@ -48,14 +79,47 @@ class Rectan extends Shape {
   show() {
     super.show();
     push();
+    if (this.size == 'big') {
     this.radius = 45;
     translate(this.pos.x, this.pos.y);
     rotate(this.angle);
-    rect(0, 0, 10 * sqrt(50), 10 * sqrt(50));
+    rect(0, 0, 10 * hcoff, 10 * hcoff);
     fill(10, 0);
     circle(0, 0, this.radius);
     translate(-this.pos.x, -this.pos.y);
     pop();
+    }
+    if (this.size == 'medium') {
+    this.radius = 30;
+    translate(this.pos.x, this.pos.y);
+    rotate(this.angle);
+    rect(0, 0, 5 * hcoff, 5 * hcoff);
+    fill(10, 0);
+    circle(0, 0, this.radius);
+    translate(-this.pos.x, -this.pos.y);
+    pop();
+    } 
+    if (this.size == 'small') {
+    this.radius = 15;
+    translate(this.pos.x, this.pos.y);
+    rotate(this.angle);
+    rect(0, 0, 2.5 * hcoff, 2.5 * hcoff);
+    fill(10, 0);
+    circle(0, 0, this.radius);
+    translate(-this.pos.x, -this.pos.y);
+    pop();
+    } 
+     if (this.size == 'rect') {
+    this.radius = 15;
+    translate(this.pos.x, this.pos.y);
+    rotate(this.angle);
+    rect(0, 0, 10/4 * hcoff, 10 * hcoff);
+    fill(10, 0);
+    circle(0, 0, this.radius);
+    translate(-this.pos.x, -this.pos.y);
+    pop();
+    }      
+        
   }
 }
 
@@ -63,6 +127,7 @@ class Quadri extends Shape {
   show() {
     super.show();
     push();
+          if (this.size == 'big') {
     this.radius = 45;
     translate(this.pos.x, this.pos.y);
     rotate(this.angle);
@@ -71,6 +136,18 @@ class Quadri extends Shape {
     circle(0, 0, this.radius);
     translate(-this.pos.x, -this.pos.y);
     pop();
+    }
+       if (this.size == 'small') {
+    this.radius = 25;
+    translate(this.pos.x, this.pos.y);
+    rotate(this.angle);
+    quad(-25/2, -25/2, 75/2, -25/2, 25/2, 25/2, -75/2, 25/2);
+    fill(10, 0);
+    circle(0, 0, this.radius);
+    translate(-this.pos.x, -this.pos.y);
+    pop();
+    }
+      
   }
 }
 
@@ -92,26 +169,38 @@ class Triangle extends Shape {
       push();
       this.radius = 45;
       translate(this.pos.x, this.pos.y);
-      rotate(this.angle);
+      rotate(this.angle);    
       triangle(
-        -10 * sqrt(50),
-        -5 * sqrt(50),
-        10 * sqrt(50),
-        -5 * sqrt(50),
+        -10 * hcoff,
+        -5 * hcoff,
+        10 * hcoff,
+        -5 * hcoff,
         0,
-        5 * sqrt(50)
+        5 * hcoff
       );
       fill(10, 0);
       circle(0, -5, this.radius);
       translate(-this.pos.x, -this.pos.y);
       pop();
     }
+          
     if (this.size == 'small') {
       push();
       this.radius = 35;
       translate(this.pos.x, this.pos.y);
       rotate(this.angle);
       triangle(-50, -25, 50, -25, 0, 25);
+      fill(10, 0);
+      circle(0, -5, this.radius);
+      translate(-this.pos.x, -this.pos.y);
+      pop();
+    }
+       if (this.size == 'xsmall') {
+      push();
+      this.radius = 20;
+      translate(this.pos.x, this.pos.y);
+      rotate(this.angle);
+      triangle(-10 * hcoff2, -5 * hcoff2, 10 * hcoff2, -5 * hcoff2, 0, 5 * hcoff2);
       fill(10, 0);
       circle(0, -5, this.radius);
       translate(-this.pos.x, -this.pos.y);
@@ -164,7 +253,7 @@ function setup() {
  shapes.push(new Circul(201, 250, 250, colors[3]));
   shapes.push(new Circul(202, 350, 250, colors[3]));
   shapes.push(new Diamond(203, 100, 150, colors[2]));
-shapes.push(new Triangle(204, 300, 350, colors[2], 'big'));
+  shapes.push(new Triangle(204, 300, 350, colors[2], 'big'));
   shapes.push(new Triangle(205, 100, 500, colors[2], 'big'));
   shapes.push(new Triangle(206, 100, 350, colors[2], 'medium'));
   shapes.push(new Triangle(207, 250, 250, colors[2], 'small'));

@@ -24,4 +24,6 @@ function newConnection(socket) {
   function shapeUpdate(data) {
     socket.broadcast.emit('moveShape', data);  
   }
+    
+    
 }

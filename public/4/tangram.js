@@ -234,9 +234,12 @@ var colors = [
   'purple',
   'pink',
 ];
-var shapes = [];
-var otherPointerPosition = {x:-1, y:-1};
 
+var shapes = [];
+var otherPointerPosition = {x:-40, y:-40};
+
+var colPicA;
+var colPicB;
 
 function setup() {
   const w = 1200;
@@ -247,36 +250,61 @@ function setup() {
   } else {
     socket = io.connect();
   }
+
   //socket.on('mouse', reDrawShape);
   socket.on('mouse', otherPointers);
   socket.on('moveShape', reDrawShape);
-
-  createCanvas(w, h);
+      
+  var cnv = createCanvas(w, h);
+  cnv.parent("sketchHolder");
+    
   angleMode(RADIANS);
   rectMode(CENTER);
   noStroke();
-  shapes.push(new Diamond(1, 100, 150, colors[1]));
-  shapes.push(new Diamond(2, 500, 150, colors[2]));
-  shapes.push(new Circul(3, 250, 450, colors[3]));
-  shapes.push(new Circul(4, 350, 450, colors[3]));
-  shapes.push(new Triangle(5, 300, 350, colors[1], 'big'));
-  shapes.push(new Triangle(6, 100, 500, colors[1], 'big'));
-  shapes.push(new Triangle(7, 100, 350, colors[1], 'medium'));
-  shapes.push(new Triangle(8, 250, 250, colors[1], 'small'));
-  shapes.push(new Triangle(9, 100, 250, colors[1], 'small'));
-  shapes.push(new Triangle(10, 100, 75, colors[1], 'xsmall'));
-  shapes.push(new Triangle(11, 150, 75, colors[1], 'xsmall'));
-  shapes.push(new Rectan(12, 350, 250, colors[1], 'big'));
-  shapes.push(new Rectan(13, 200, 150, colors[1], 'medium'));
-  shapes.push(new Rectan(14, 100, 50, colors[1],'small'));
-  shapes.push(new Rectan(15, 150, 50, colors[1],'small'));
-  shapes.push(new Rectan(16, 200, 50, colors[1],'small'));
-  shapes.push(new Rectan(17, 250, 50, colors[1],'small'));
-  shapes.push(new Rectan(18, 300, 50, colors[1],'rect'));    
-  shapes.push(new Quadri(19, 250, 500, colors[1], 'big'));
-  shapes.push(new Quadri(20, 300, 150, colors[1], 'small'));
-  shapes.push(new Circul(21, 650, 550, colors[3]));
-  shapes.push(new Circul(22, 750, 450, colors[3]));
+
+  colPicA = createColorPicker(colors[1]); 
+  colPicA.position(250, 40);
+  colPicA.parent("sketchHolder");  
+
+    
+  colPicB = createColorPicker(colors[2]); 
+  colPicB.position(320, 40);
+  colPicB.parent("sketchHolder");   
+            
+  var input = createInput();
+  input.position(400, 35);
+  input.parent("sketchHolder");
+    
+  var button = createButton('show');
+  button.parent("sketchHolder");  
+  button.position(650, 37, 50);
+  
+  var button = createButton('reset');
+  button.parent("sketchHolder");  
+  button.position(740, 37, 50);
+
+  shapes.push(new Diamond(1, 100, 150, colors[1])); 
+  shapes.push(new Triangle(2, 300, 350, colors[1], 'big'));
+  shapes.push(new Triangle(3, 100, 500, colors[1], 'big'));
+  shapes.push(new Triangle(4, 100, 350, colors[1], 'medium'));
+  shapes.push(new Triangle(5, 250, 250, colors[1], 'small'));
+  shapes.push(new Triangle(6, 100, 250, colors[1], 'small'));
+  shapes.push(new Triangle(7, 100, 75, colors[1], 'xsmall'));
+  shapes.push(new Triangle(8, 150, 75, colors[1], 'xsmall'));
+  shapes.push(new Rectan(9, 350, 250, colors[1], 'big'));
+  shapes.push(new Rectan(10, 200, 150, colors[1], 'medium'));
+  shapes.push(new Rectan(11, 100, 50, colors[1],'small'));
+  shapes.push(new Rectan(12, 150, 50, colors[1],'small'));
+  shapes.push(new Rectan(13, 200, 50, colors[1],'small'));
+  shapes.push(new Rectan(14, 250, 50, colors[1],'small'));
+  shapes.push(new Rectan(15, 300, 50, colors[1],'rect'));    
+  shapes.push(new Quadri(16, 250, 500, colors[1], 'big'));
+  shapes.push(new Quadri(17, 300, 150, colors[1], 'small'));
+  shapes.push(new Circul(18, 250, 450, colors[3]));
+  shapes.push(new Circul(19, 350, 450, colors[3]));    
+  shapes.push(new Circul(20, 650, 550, colors[3]));
+  shapes.push(new Circul(21, 750, 450, colors[3]));
+  shapes.push(new Diamond(22, 500, 150, colors[2]));
   shapes.push(new Triangle(23, 700, 350, colors[2], 'big'));
   shapes.push(new Triangle(24, 500, 500, colors[2], 'big'));
   shapes.push(new Triangle(25, 500, 350, colors[2], 'medium')); 
@@ -292,25 +320,154 @@ function setup() {
   shapes.push(new Rectan(35, 650, 50, colors[2],'small'));
   shapes.push(new Rectan(36, 700, 50, colors[2],'rect'));        
   shapes.push(new Quadri(37, 650, 500, colors[2], 'big'));
-  shapes.push(new Quadri(38, 700, 150, colors[2], 'small'));
+  shapes.push(new Quadri(38, 700, 150, colors[2], 'small'));  
 }
 
+
 function draw() {
-    background('#FFF4EE');
-  for (let shape of shapes) {
-    shape.show();
+background('#FFF4EE');
+
+//console.log(shapes[shapes.indexOf(shape)].id);
+    
+const shape1 = shapes.find((shape) => shape.id === 1);
+const shape2 = shapes.find((shape) => shape.id === 2);
+const shape3 = shapes.find((shape) => shape.id === 3);
+const shape4 = shapes.find((shape) => shape.id === 4);
+const shape5 = shapes.find((shape) => shape.id === 5);
+const shape6 = shapes.find((shape) => shape.id === 6);
+const shape7 = shapes.find((shape) => shape.id === 7);
+const shape8 = shapes.find((shape) => shape.id === 8);
+const shape9 = shapes.find((shape) => shape.id === 9);
+const shape10 = shapes.find((shape) => shape.id === 10);
+const shape11 = shapes.find((shape) => shape.id === 11);
+const shape12 = shapes.find((shape) => shape.id === 12);
+const shape13 = shapes.find((shape) => shape.id === 13);
+const shape14 = shapes.find((shape) => shape.id === 14);
+const shape15 = shapes.find((shape) => shape.id === 15);
+const shape16 = shapes.find((shape) => shape.id === 16);
+const shape17 = shapes.find((shape) => shape.id === 17);
+const shape18 = shapes.find((shape) => shape.id === 18);
+const shape19 = shapes.find((shape) => shape.id === 19);
+const shape20 = shapes.find((shape) => shape.id === 20);
+const shape21 = shapes.find((shape) => shape.id === 21);
+const shape22 = shapes.find((shape) => shape.id === 22);
+const shape23 = shapes.find((shape) => shape.id === 23);
+const shape24 = shapes.find((shape) => shape.id === 24);
+const shape25 = shapes.find((shape) => shape.id === 25);
+const shape26 = shapes.find((shape) => shape.id === 26);
+const shape27 = shapes.find((shape) => shape.id === 27);
+const shape28 = shapes.find((shape) => shape.id === 28);
+const shape29 = shapes.find((shape) => shape.id === 29);
+const shape30 = shapes.find((shape) => shape.id === 30);
+const shape31 = shapes.find((shape) => shape.id === 31);
+const shape32 = shapes.find((shape) => shape.id === 32);
+const shape33 = shapes.find((shape) => shape.id === 33);
+const shape34 = shapes.find((shape) => shape.id === 34);
+const shape35 = shapes.find((shape) => shape.id === 35);
+const shape36 = shapes.find((shape) => shape.id === 36);
+const shape37 = shapes.find((shape) => shape.id === 37);
+const shape38 = shapes.find((shape) => shape.id === 38);
+
+/*    
+var shapeGroupA = [shape1, shape2, shape3, shape4, shape5, shape6, shape7, shape8, shape9, shape11, shape12, shape13, shape14, shape15, shape16, shape17]; 
+    
+var shapeGroupB = [shape22, shape22, shape23, shape24, shape25, shape26, shape27, shape28, shape29, shape30, shape31, shape32, shape33, shape34, shape35, shape36, shape37, shape38];     
+
+    
+var i;
+    for (i=0; i<18; i++){
+shapeGroupA[i].color = colPicA.color();
+shape2.color = colPicA.color();         
+    }
+*/
+
+shape1.color = colPicA.color(); 
+shape1.color.setAlpha(170);        
+shape2.color = colPicA.color(); 
+shape2.color.setAlpha(170);        
+shape3.color = colPicA.color(); 
+shape3.color.setAlpha(170);        
+shape4.color = colPicA.color(); 
+shape4.color.setAlpha(170);        
+shape5.color = colPicA.color(); 
+shape5.color.setAlpha(170);        
+shape6.color = colPicA.color(); 
+shape6.color.setAlpha(170);        
+shape7.color = colPicA.color(); 
+shape7.color.setAlpha(170);        
+shape8.color = colPicA.color(); 
+shape8.color.setAlpha(170); 
+shape9.color = colPicA.color(); 
+shape9.color.setAlpha(170);   
+shape10.color = colPicA.color(); 
+shape10.color.setAlpha(170);   
+shape11.color = colPicA.color(); 
+shape11.color.setAlpha(170);     
+shape12.color = colPicA.color(); 
+shape12.color.setAlpha(170);         
+shape13.color = colPicA.color(); 
+shape13.color.setAlpha(170);  
+shape14.color = colPicA.color(); 
+shape14.color.setAlpha(170);     
+shape15.color = colPicA.color(); 
+shape15.color.setAlpha(170);     
+shape16.color = colPicA.color(); 
+shape16.color.setAlpha(170);     
+shape17.color = colPicA.color(); 
+shape17.color.setAlpha(170);     
+
+    
+shape22.color = colPicB.color(); 
+shape22.color.setAlpha(170); 
+shape23.color = colPicB.color(); 
+shape23.color.setAlpha(170);        
+shape24.color = colPicB.color(); 
+shape24.color.setAlpha(170);        
+shape25.color = colPicB.color(); 
+shape25.color.setAlpha(170);        
+shape26.color = colPicB.color(); 
+shape26.color.setAlpha(170);        
+shape27.color = colPicB.color(); 
+shape27.color.setAlpha(170);        
+shape28.color = colPicB.color(); 
+shape28.color.setAlpha(170); 
+shape29.color = colPicB.color(); 
+shape29.color.setAlpha(170);   
+shape30.color = colPicB.color(); 
+shape30.color.setAlpha(170);   
+shape31.color = colPicB.color(); 
+shape31.color.setAlpha(170);     
+shape32.color = colPicB.color(); 
+shape32.color.setAlpha(170);         
+shape33.color = colPicB.color(); 
+shape33.color.setAlpha(170);  
+shape34.color = colPicB.color(); 
+shape34.color.setAlpha(170);     
+shape35.color = colPicB.color(); 
+shape35.color.setAlpha(170);     
+shape36.color = colPicB.color(); 
+shape36.color.setAlpha(170);     
+shape37.color = colPicB.color(); 
+shape37.color.setAlpha(170);     
+shape38.color = colPicB.color(); 
+shape38.color.setAlpha(170);         
+    
+      
+    for (let shape of shapes) {
+    shape.show();  
   };
   fill(150);
 ellipse(otherPointerPosition.x, otherPointerPosition.y, 20, 20);
+
 }
 
-function reDrawShape(data) {
+function reDrawShape(data) {    
   const shapeMoved = shapes.find((shape) => shape.id === data.id);
   shapeMoved.pos.x = data.x;
   shapeMoved.pos.y = data.y;
   shapeMoved.angle = data.z;
   putShapeInFront(shapeMoved);
-  console.log(data);
+  console.log(data);    
 }
 
 function otherPointers(data) {
@@ -322,6 +479,8 @@ function putShapeInFront(shape) {
   shapes.push(shape);
   shapes.splice(shapes.indexOf(shape), 1);
   lastShape = shapes[shapes.length -1];
+  console.table(shapes);
+      
 }
 
 let clickedShape = false;
@@ -341,12 +500,14 @@ function mousePressed() {
 putShapeInFront(shapeSelected)
     
 //lastShape = shapeSelected;    
-    
+        
 const data = {
     id:shapeSelected.id,
     x: shapeSelected.pos.x,
     y: shapeSelected.pos.y,
     z: shapeSelected.angle,
+    color1: shape1.color,
+    color2: shape2.color,
   };
 socket.emit('moveShape', data);
 }
@@ -355,7 +516,7 @@ socket.emit('moveShape', data);
 function mouseReleased() {
   //shapeSelected = false;
   clickedShape = false;
-
+        
 }
 
 function mouseMoved() {
@@ -398,8 +559,7 @@ function tcw() {
 }
 
 function tccw() {
-  if (shapeSelected) shapeSelected.rotateCCW();
-    
+  if (shapeSelected) shapeSelected.rotateCCW();    
     const data = {
     id: shapeSelected.id,
     x: shapeSelected.pos.x,

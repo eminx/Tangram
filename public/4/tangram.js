@@ -289,7 +289,7 @@ function setup() {
   txt = storytext.text;  
   inputTxt.parent("sketchHolder");
   console.log(inputTxt.value()); 
-  inputTxt.elt.addEventListener('change', changeTextRequest);    
+  inputTxt.elt.addEventListener('input', changeTextRequest);    
         
   var button = createButton('reset');
   button.parent("sketchHolder"); 

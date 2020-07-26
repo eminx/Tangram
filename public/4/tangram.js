@@ -9,7 +9,6 @@ class Shape {
     this.angle = 0;
     this.radius = 30;
     this.size = size;
-    this.skala = 1;
   }
           
   show() {
@@ -241,6 +240,9 @@ var otherPointerPosition = {x:-40, y:-40};
 var colPicA;
 var colPicB;
 
+var colA;
+var colB;
+
 function setup() {
   const w = 1200;
   const h = 900;
@@ -254,7 +256,8 @@ function setup() {
   //socket.on('mouse', reDrawShape);
   socket.on('mouse', otherPointers);
   socket.on('moveShape', reDrawShape);
-      
+  socket.on('colorChangeConfirm', changeShapeColor);
+    
   var cnv = createCanvas(w, h);
   cnv.parent("sketchHolder");
     
@@ -264,13 +267,18 @@ function setup() {
 
   colPicA = createColorPicker(colors[1]); 
   colPicA.position(250, 40);
-  colPicA.parent("sketchHolder");  
-
-    
+    colPicA.id("firstPicker");
+  colPicA.parent("sketchHolder"); 
+  colA = colPicA.color();
+  colPicA.elt.addEventListener('change', changeColorRequest);
+              
   colPicB = createColorPicker(colors[2]); 
   colPicB.position(320, 40);
-  colPicB.parent("sketchHolder");   
-            
+  colPicB.id("secondPicker");
+  colPicB.parent("sketchHolder");  
+  colB = colPicB.color();
+  colPicB.elt.addEventListener('change', changeColorRequest);
+                                                   
   var input = createInput();
   input.position(400, 35);
   input.parent("sketchHolder");
@@ -368,21 +376,31 @@ const shape36 = shapes.find((shape) => shape.id === 36);
 const shape37 = shapes.find((shape) => shape.id === 37);
 const shape38 = shapes.find((shape) => shape.id === 38);
 
-/*    
+// This part of the code could not survive draw loop.
+    
+/*  
 var shapeGroupA = [shape1, shape2, shape3, shape4, shape5, shape6, shape7, shape8, shape9, shape11, shape12, shape13, shape14, shape15, shape16, shape17]; 
     
 var shapeGroupB = [shape22, shape22, shape23, shape24, shape25, shape26, shape27, shape28, shape29, shape30, shape31, shape32, shape33, shape34, shape35, shape36, shape37, shape38];     
 
+shapes = shapes.reduce((obj,shape)=>[
+   obj[shape.id] = shape;
+   return obj;
+]);
     
-var i;
-    for (i=0; i<18; i++){
-shapeGroupA[i].color = colPicA.color();
-shape2.color = colPicA.color();         
-    }
+for(let i=1;i<=18; i++){
+   shapes[i].color = colPicA.color();
+   shapes[i].color.setAlpha(170);
+}
+    
+for(let i=22;i<=38; i++){
+   shapes[i].color = colPicA.color();
+   shapes[i].color.setAlpha(170);
+}
 */
 
-shape1.color = colPicA.color(); 
-shape1.color.setAlpha(170);        
+shape1.color = colPicA.color();
+shape1.color.setAlpha(170);            
 shape2.color = colPicA.color(); 
 shape2.color.setAlpha(170);        
 shape3.color = colPicA.color(); 
@@ -415,7 +433,6 @@ shape16.color = colPicA.color();
 shape16.color.setAlpha(170);     
 shape17.color = colPicA.color(); 
 shape17.color.setAlpha(170);     
-
     
 shape22.color = colPicB.color(); 
 shape22.color.setAlpha(170); 
@@ -451,7 +468,7 @@ shape37.color = colPicB.color();
 shape37.color.setAlpha(170);     
 shape38.color = colPicB.color(); 
 shape38.color.setAlpha(170);         
-    
+ 
       
     for (let shape of shapes) {
     shape.show();  
@@ -474,13 +491,31 @@ function otherPointers(data) {
   otherPointerPosition = data;
 }
 
+function changeColorRequest(){
+  const data = {
+    newColA: colPicA.color().toString('#rrggbb'), 
+    newColB: colPicB.color().toString('#rrggbb')
+  };
+    console.log({data});
+    colA= colPicA.color();
+    colB= colPicB.color();
+  socket.emit('colorChangeRequest', data);
+}
+
+function changeShapeColor({newColA, newColB}){
+  colA = newColA;
+  colB = newColB;
+  console.log('Got new color', newColA, newColB);
+  colPicA.value(colA);
+  colPicB.value(colB);    
+  }
+
+
 let lastShape;
 function putShapeInFront(shape) {
   shapes.push(shape);
   shapes.splice(shapes.indexOf(shape), 1);
-  lastShape = shapes[shapes.length -1];
-  console.table(shapes);
-      
+  lastShape = shapes[shapes.length -1];      
 }
 
 let clickedShape = false;
@@ -506,8 +541,6 @@ const data = {
     x: shapeSelected.pos.x,
     y: shapeSelected.pos.y,
     z: shapeSelected.angle,
-    color1: shape1.color,
-    color2: shape2.color,
   };
 socket.emit('moveShape', data);
 }
@@ -515,8 +548,7 @@ socket.emit('moveShape', data);
 
 function mouseReleased() {
   //shapeSelected = false;
-  clickedShape = false;
-        
+  clickedShape = false;         
 }
 
 function mouseMoved() {
@@ -568,8 +600,4 @@ function tccw() {
   };
       socket.emit('moveShape', data);
 }
-
-// function flip() {
-//  if (lastShape) lastShape.flipper;
-// console.log (lastShape.skala)             
-//}
+    

@@ -10,20 +10,17 @@ console.log('Socket server is running at localhost:' + port);
 let socket = require('socket.io');
 let io = socket(server);
 
-io.sockets.on('connection', newConnection);
-
-function newConnection(socket) {
-  console.log('connection:', socket.id);
-  socket.on('mouse', mouseMsg);
-
-  function mouseMsg(data) {
-    socket.broadcast.emit('mouse', data);
-  }
+io.sockets.on('connection', client => {
+  client.on('mouse', data => {
+    client.broadcast.emit('mouse', data);
+  });
     
-  socket.on('moveShape', shapeUpdate);
-  function shapeUpdate(data) {
-    socket.broadcast.emit('moveShape', data);  
-  }
+  client.on('moveShape', data => {
+    client.broadcast.emit('moveShape', data);  
+  });
     
-    
-}
+  client.on('colorChangeRequest', data => {
+      console.log("received color");
+  	io.sockets.emit('colorChangeConfirm', data);  
+  });
+});

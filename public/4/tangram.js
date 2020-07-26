@@ -1,5 +1,8 @@
 'use strict';
 
+const fr = 24; //framerate
+let capturer = new CCapture({ format: "webm", framerate: fr });
+
 // Base class that does all the common operations.
 class Shape {
   constructor(id, x, y, color, size, skala) {
@@ -246,7 +249,10 @@ var colB;
 var inputTxt;
 var txt;
 
+
+
 function setup() {
+
   const w = 1200;
   const h = 900;
 
@@ -264,7 +270,8 @@ function setup() {
   
   var cnv = createCanvas(w, h);
   cnv.parent("sketchHolder");
-    
+
+ 
   angleMode(RADIANS);
   rectMode(CENTER);
   noStroke();
@@ -294,7 +301,7 @@ function setup() {
   var button = createButton('reset');
   button.parent("sketchHolder"); 
   button.id("reset");
-  button.position(650, 37, 50);
+  button.position(650, 37);
   button.mousePressed(resetText);    
   
   shapes.push(new Diamond(1, 100, 150, colors[1])); 
@@ -335,6 +342,43 @@ function setup() {
   shapes.push(new Rectan(36, 700, 50, colors[2],'rect'));        
   shapes.push(new Quadri(37, 650, 500, colors[2], 'big'));
   shapes.push(new Quadri(38, 700, 150, colors[2], 'small'));  
+
+
+
+//End of Setup
+
+frameRate(24);
+// btn = document.createElement("button");
+// btn.textContent = "start recording";
+// btn.position(650, 37);
+// document.body.appendChild(btn);
+// btn.onclick = record;
+// btn.click(); //start recording automatically
+
+
+var recBtn = createButton('record');
+recBtn.parent("sketchHolder"); 
+recBtn.id("record");
+recBtn.position(750, 40);
+recBtn.mousePressed(function(){
+ capturer.start();
+ console.log("pressed")
+}); 
+
+
+
+var saveBtn = createButton('download');
+saveBtn.parent("sketchHolder"); 
+saveBtn.id("download");
+saveBtn.position(850, 40);
+saveBtn.mousePressed(function(){
+  capturer.stop();
+  capturer.save();
+
+}); 
+
+
+// End of Setup
 }
 
 
@@ -486,6 +530,14 @@ shape38.color.setAlpha(170);
   };
   fill(150);
 ellipse(otherPointerPosition.x, otherPointerPosition.y, 20, 20);
+
+// End of DRAW
+
+ if (capturer) {
+  capturer.capture(document.getElementById("defaultCanvas0"));
+};
+// End of DRAW
+
 }
 
 function reDrawShape(data) {    

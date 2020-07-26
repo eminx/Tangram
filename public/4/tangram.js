@@ -243,6 +243,9 @@ var colPicB;
 var colA;
 var colB;
 
+var inputTxt;
+var txt;
+
 function setup() {
   const w = 1200;
   const h = 900;
@@ -257,7 +260,8 @@ function setup() {
   socket.on('mouse', otherPointers);
   socket.on('moveShape', reDrawShape);
   socket.on('colorChangeConfirm', changeShapeColor);
-    
+  socket.on('textChangeConfirm', changeTextValue);
+  
   var cnv = createCanvas(w, h);
   cnv.parent("sketchHolder");
     
@@ -267,7 +271,7 @@ function setup() {
 
   colPicA = createColorPicker(colors[1]); 
   colPicA.position(250, 40);
-    colPicA.id("firstPicker");
+  colPicA.id("firstPicker");
   colPicA.parent("sketchHolder"); 
   colA = colPicA.color();
   colPicA.elt.addEventListener('change', changeColorRequest);
@@ -279,18 +283,20 @@ function setup() {
   colB = colPicB.color();
   colPicB.elt.addEventListener('change', changeColorRequest);
                                                    
-  var input = createInput();
-  input.position(400, 35);
-  input.parent("sketchHolder");
-    
-  var button = createButton('show');
-  button.parent("sketchHolder");  
-  button.position(650, 37, 50);
-  
+  inputTxt = createInput('You can type, too.');
+  inputTxt.position(400, 35);
+  inputTxt.id("storytext");
+  txt = storytext.text;  
+  inputTxt.parent("sketchHolder");
+  console.log(inputTxt.value()); 
+  inputTxt.elt.addEventListener('change', changeTextRequest);    
+        
   var button = createButton('reset');
-  button.parent("sketchHolder");  
-  button.position(740, 37, 50);
-
+  button.parent("sketchHolder"); 
+  button.id("reset");
+  button.position(650, 37, 50);
+  button.mousePressed(resetText);    
+  
   shapes.push(new Diamond(1, 100, 150, colors[1])); 
   shapes.push(new Triangle(2, 300, 350, colors[1], 'big'));
   shapes.push(new Triangle(3, 100, 500, colors[1], 'big'));
@@ -334,7 +340,12 @@ function setup() {
 
 function draw() {
 background('#FFF4EE');
+    
+//add text from storytext.value
+textSize(50);   
+text(inputTxt.value(), 200, 650);     
 
+    
 //console.log(shapes[shapes.indexOf(shape)].id);
     
 const shape1 = shapes.find((shape) => shape.id === 1);
@@ -475,7 +486,6 @@ shape38.color.setAlpha(170);
   };
   fill(150);
 ellipse(otherPointerPosition.x, otherPointerPosition.y, 20, 20);
-
 }
 
 function reDrawShape(data) {    
@@ -508,6 +518,30 @@ function changeShapeColor({newColA, newColB}){
   console.log('Got new color', newColA, newColB);
   colPicA.value(colA);
   colPicB.value(colB);    
+  }
+
+function changeTextRequest(){
+  const data = {
+    newTxt: inputTxt.value()
+  };
+    console.log({data});
+    txt = inputTxt.value();
+  socket.emit('textChangeRequest', data);
+}
+
+function resetText(){
+  const data = {
+    newTxt: ""
+  };
+    console.log({data});
+    txt = inputTxt.value();
+  socket.emit('textChangeRequest', data);
+}
+
+function changeTextValue({newTxt}){
+  txt = newTxt;
+  console.log('Got new text', newTxt);
+  inputTxt.value(txt);    
   }
 
 

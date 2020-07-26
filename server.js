@@ -23,4 +23,11 @@ io.sockets.on('connection', client => {
       console.log("received color");
   	io.sockets.emit('colorChangeConfirm', data);  
   });
+
+  client.on('textChangeRequest', data => {
+      console.log("received text");
+  	io.sockets.emit('textChangeConfirm', data);  
+  });    
+    
+    
 });
